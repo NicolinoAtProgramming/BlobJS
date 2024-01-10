@@ -1,0 +1,79 @@
+<!--
+  BlobJS example with p5.js
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
+  <script src="Blob.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+  <script>
+    var world;
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  world = new BlobJS.World();
+  world.setBounds(0, -10000, width, height-10000);
+}
+function draw() {
+  clear();
+  if (frameCount % 60 == 0) {
+    var rc = "rgb(" + Math.round(random(255)) + ", " + Math.round(random(255)) + ", " + Math.round(random(255)) + ")";
+    if (random(1) > 0.5) {
+      var b = BlobJS.templates.createBlob({
+        world: world,
+        x: 100+random(width-200),
+        y: height-frameCount*1.8,
+        points: 25,
+        radius: 50,
+        color: rc,
+        mass: 1,
+        hardness: 0.5,
+        particleRadius: 40
+      });
+      world.add(b);
+    }
+    else {
+      var b = BlobJS.templates.createRect({
+        world: world,
+        x: 100+random(width-200),
+        y: height-frameCount*1.8,
+        width: 5,
+        height: 5,
+        distX: 10,
+        distY: 10,
+        mass: 1,
+        hardness: 0.5,
+        color: rc,
+        particleRadius: 40
+      });
+      world.add(b);
+    }
+  }
+  world.update();
+  for (var i = 0; i < world.shapes.length; i++) {
+    var s = world.shapes[i];
+    var v = s.getRenderVertices();
+    beginShape();
+    for (var j = 0; j < v.length; j++) {
+      if (!isNaN(v[j].x) && !isNaN(v[j].y)) {
+        curveVertex(v[j].x, v[j].y);
+      }
+    }
+    fill(s.color);
+    noStroke();
+    endShape();
+  }
+  for (var i = 0; i < world.obstacles.length; i++) {
+    var o = world.obstacles[i];
+    fill("grey");
+    rect(o.x, o.y, o.w, o.w);
+  }
+  fill("black");
+  stroke("black");
+  text("Particles: " + world.particles.length, 0, 20);
+}
+  </script>
+</body>
+</html>
