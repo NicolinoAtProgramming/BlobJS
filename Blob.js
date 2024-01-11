@@ -6,7 +6,7 @@
   Why are there Blobjects?
   Because you can use them to add shapes and obstacles without using different function for that.
   Shapes are objects which contain their particles and color (optional).
-  They are created to say which particle belongs to which object. particles of the same shape can overlap each other.
+  They are created to say which particle belongs to which object. Particles of the same shape can overlap each other.
 */
 var BlobJS = {
   //World "class"
